@@ -6,6 +6,7 @@ namespace CastleGrimtol.Project
     {
         string Name {get;set;}
         int Score { get; set; }
+        int Health {get; set;}
         List<Item> Inventory { get; set; }
 
     }
