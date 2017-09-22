@@ -301,9 +301,10 @@ namespace CastleGrimtol.Project
                 {
                     switch (item.Name)
                     {
-                        case "BED 1":
+                        case "BED1":
                             System.Console.WriteLine("You climb into the bed and pretend to be asleep. A few minutes later several guards walk into the room. One approaches you to wake you... (GUARD)" + "Hey Get Up! it's your turn for watch, Go relieve Shigeru in the Guard Room" + "Quickly you climb out of the bed");
                             CurrentPlayer.Score += 50;
+                            System.Console.WriteLine("Nice Work! You've earned 50 points!");
                             break;
                     }
                 }
