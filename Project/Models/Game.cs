@@ -54,6 +54,9 @@ namespace CastleGrimtol.Project
                         break;
                     case "LOOK":
                         Look();
+                        System.Console.WriteLine("\nPress any key to continue...");
+                        Console.ReadKey();
+
                         break;
                     case "INVENTORY":
                         DisplayInventory();
@@ -81,6 +84,7 @@ namespace CastleGrimtol.Project
         {
             CurrentPlayer.Health = 100;
             CurrentPlayer.Score = 0;
+            Commands.Clear();
             CurrentPlayer.Inventory.Clear();
             Setup();
             DisplayInfo();
@@ -94,7 +98,7 @@ namespace CastleGrimtol.Project
             Room WestHallway = new Room("West Hallway", "You find yourself in a small hall. There doesnt appear to be anything of interest here.\n");
             Room SouthHallway = new Room("South Hallway", "You find yourself in a small hall. There doesnt appear to be anything of interest here.\n");
             Room NorthHallway = new Room("North Hallway", "You find yourself in a small hall. There doesnt appear to be anything of interest here.\n");
-            Room Barracks = new Room("Barracks", "You see a room with several sleeping guards, The room smells of sweaty men. You see two beds (Bed 1 and Bed 2) The bed closest to you (Bed 1) is empty and there are several uniforms tossed about.\n");
+            Room Barracks = new Room("Barracks", "You see a room with several sleeping guards, The room smells of sweaty men. You see two beds (Bed1 and Bed2) The bed closest to you (Bed1) is empty and there are several uniforms tossed about.\n");
             Room GuardRoom = new Room("Guard Room", "Pushing open the door of the guard room you look around and notice the room is empty, There are a few small tools in the corner and a chair propped against the wall near the that likely leads to the dungeon.\n");
             Room Dungeon = new Room("Dungeon", "As you descend the stairs to the dungeon you notice a harsh chill to the air. Landing at the base of the stairs you see the remains of what appears to be a previous prisoner.\n");
             Room CapitainsQuarters = new Room("Capitain's Quarters", "As you approach the captains Quarters you swallow hard and notice your lips are dry, Stepping into the room you see a few small tables and maps of the countryside sprawled out.\n");
@@ -282,7 +286,7 @@ namespace CastleGrimtol.Project
                         {
                             case "UNIFORM":
                                 CurrentPlayer.disguised = true;
-                                System.Console.WriteLine("You're incognito.");
+                                System.Console.WriteLine("You're incognito. You can now move about the castle disguised as a guard.");
                                 break;
                             case "HAMMER":
                                 // CurrentRoom.Items.Find(entry => item.Name == "BROKEN LOCK").Collectable = true;
@@ -347,10 +351,11 @@ namespace CastleGrimtol.Project
                     switch (item.Name)
                     {
                         case "BED1":
-                            System.Console.WriteLine("You climb into the bed and pretend to be asleep. A few minutes later several guards walk into the room. One approaches you to wake you... (GUARD)" + "Hey Get Up! it's your turn for watch, Go relieve Shigeru in the Guard Room" + "Quickly you climb out of the bed");
+                            Console.Clear();
+                            System.Console.WriteLine("You climb into the bed and pretend to be asleep. A few minutes later several guards walk into the room. One approaches you to wake you... (GUARD)" + "Hey Get Up! it's your turn for watch, Go relieve Shigeru in the Guard Room!\" Quickly you climb out of the bed");
                             CurrentPlayer.Score += 50;
                             System.Console.WriteLine("Nice Work! You've earned 50 points!");
-                            break;
+                            return;
                         case "BED2":
                             CurrentPlayer.Health = 0;
                             Console.Clear();
@@ -358,7 +363,7 @@ namespace CastleGrimtol.Project
                             System.Console.WriteLine("\n(GUARD) \"What do you think your doing? Hey your not Leroy, Quick Jenkins sieze him....\" Jenkins a bit over-zelous swings his sword cleaving you in half... ");
                             System.Console.WriteLine("\nDang... You're dead.");
                             TryAgain();
-                            break;
+                            return;
                     }
                 }
             }
@@ -368,7 +373,6 @@ namespace CastleGrimtol.Project
         public void TakeItem(string itemName)
         {
             itemName.ToUpper();
-            System.Console.WriteLine(itemName);
             // Find Item
             for (int i = 0; i < CurrentRoom.Items.Count; i++)
             {
@@ -377,9 +381,14 @@ namespace CastleGrimtol.Project
                 {
                     if (item.Collectable)
                     {
-                        System.Console.WriteLine("names match");
                         CurrentPlayer.Inventory.Add(item);
-                        Console.WriteLine($"{item.Name} added to your inventory. Press any key to continue");
+                        Console.WriteLine($"\nNice! {item.Name} added to your inventory.");
+                        // instruct user to use the uniform immediately
+                        if (item.Name == "UNIFORM")
+                        {
+                            Console.WriteLine("Use this immediately!");
+                        }
+                        // remove the item from the list of available items in the room
                         CurrentRoom.Items.Remove(item);
                         return;
                     }
@@ -424,6 +433,7 @@ namespace CastleGrimtol.Project
 
         public void Look()
         {
+            Console.Clear();
             Console.WriteLine($"You are in the {CurrentRoom.Name}.");
             Console.WriteLine($"{CurrentRoom.Description}\n\n");
         }
@@ -454,15 +464,13 @@ namespace CastleGrimtol.Project
             {
                 Console.WriteLine("\nDo you want to try again? (Y/N)");
                 string Decision = Console.ReadLine().ToUpper();
-                Console.WriteLine(Decision);
                 if (Decision == "Y")
                 {
                     Reset();
                 }
                 if (Decision == "N")
                 {
-                    showMenu = false;
-                    playGame = false;
+                    Environment.Exit(0);
                 }
                 else
                 {
@@ -474,34 +482,48 @@ namespace CastleGrimtol.Project
         private void RoomCheck()
         {
             // System.Console.WriteLine($"made it to room check. Current room is: {CurrentRoom.Name}");
-            switch (CurrentRoom.Name)
+            if (CurrentPlayer.disguised)
             {
-                case "Capitain's Quarters":
-                    if (CurrentPlayer.Inventory.Any(item => item.Name.Contains("BROKEN_LOCK")) && CapitainsRoomEntered)
-                    {
-                        Console.Clear();
-                        System.Console.WriteLine("\"\nWhat are you doing back here? I told you to stay in the Guard Room\" \"You'd better have a good reason to be back here!\"\nHINT: Use broken lock!");
-                        Console.WriteLine("\nPress any key to continue...");
-                        Console.ReadKey();
-                    }
-                    else if (!CurrentPlayer.Inventory.Any(item => item.Name.Contains("BROKEN_LOCK")) && CapitainsRoomEntered)
-                    {
-                        Console.Clear();
-                        System.Console.WriteLine("\"What are you doing back here? I told you to stay in the Guard Room!\" \"Dah!\"");
-                        System.Console.WriteLine("\nThe Capitain is pissed and slices your throat. You die.");
-                        TryAgain();
-                    }
 
-                    else if (!CapitainsRoomEntered)
-                    {
-                        Console.Clear();
-                        System.Console.WriteLine("The captain on shift greets you (CAPTAIN) \"New recruit huh. Well lets stick you in the guard room you can't screw things up there. Go relieve (He pauses and glancing at his reports) private Miyamoto.\"");
-                        Console.WriteLine("\nPress any key to continue...");
-                        Console.ReadKey();
-                        CapitainsRoomEntered = true;
-                        return;
-                    }
-                    break;
+                switch (CurrentRoom.Name)
+                {
+                    case "Capitain's Quarters":
+                        if (CurrentPlayer.Inventory.Any(item => item.Name.Contains("BROKEN_LOCK")) && CapitainsRoomEntered)
+                        {
+                            Console.Clear();
+                            System.Console.WriteLine("\"\nWhat are you doing back here? I told you to stay in the Guard Room\" \"You'd better have a good reason to be back here!\"\nHINT: Use broken lock!");
+                            Console.WriteLine("\nPress any key to continue...");
+                            Console.ReadKey();
+                        }
+                        else if (!CurrentPlayer.Inventory.Any(item => item.Name.Contains("BROKEN_LOCK")) && CapitainsRoomEntered)
+                        {
+                            Console.Clear();
+                            System.Console.WriteLine("\"What are you doing back here? I told you to stay in the Guard Room!\" \"Dah!\"");
+                            System.Console.WriteLine("\nThe Capitain is pissed and slices your throat. You die.");
+                            TryAgain();
+                        }
+
+                        else if (!CapitainsRoomEntered)
+                        {
+                            Console.Clear();
+                            System.Console.WriteLine("The captain on shift greets you (CAPTAIN) \"New recruit huh. Well lets stick you in the guard room you can't screw things up there. Go relieve (He pauses and glancing at his reports) private Miyamoto.\"");
+                            Console.WriteLine("\nPress any key to continue...");
+                            Console.ReadKey();
+                            CapitainsRoomEntered = true;
+                            return;
+                        }
+                        break;
+                }
+            }
+            else // Uniform not used
+            {
+                if (CurrentRoom.Name == "Barracks")  // if they're entering the Barracks, they're fine. 
+                {
+                    return;
+                }
+                Console.Clear();
+                System.Console.WriteLine("Oh no! A guard spotted you, (Guard) \"Hey! You're not supposed to be here!\" He comes running at you. Ten others join him. You get slashed to death...\n");
+                TryAgain();
             }
         }
     }
