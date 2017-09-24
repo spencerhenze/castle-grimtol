@@ -86,6 +86,7 @@ namespace CastleGrimtol.Project
             CurrentPlayer.Score = 0;
             Commands.Clear();
             CurrentPlayer.Inventory.Clear();
+            CapitainsRoomEntered = false;
             Setup();
             DisplayInfo();
             Run();
@@ -102,9 +103,9 @@ namespace CastleGrimtol.Project
             Room GuardRoom = new Room("Guard Room", "Pushing open the door of the guard room you look around and notice the room is empty, There are a few small tools in the corner and a chair propped against the wall near the that likely leads to the dungeon.\n");
             Room Dungeon = new Room("Dungeon", "As you descend the stairs to the dungeon you notice a harsh chill to the air. Landing at the base of the stairs you see the remains of what appears to be a previous prisoner.\n");
             Room CapitainsQuarters = new Room("Capitain's Quarters", "As you approach the captains Quarters you swallow hard and notice your lips are dry, Stepping into the room you see a few small tables and maps of the countryside sprawled out.\n");
-            Room SquireTower = new Room("Squire Tower", "As you finish climbing the stairs to the squire tower you see a messenger nestled in his bed. His messenger overcoat is hanging from his bed post.\n");
-            Room WarRoom = new Room("War Room", "Steping into the war room you see several maps spread across tables. On the maps many of the villages have been marked for purification. You also notice several dishes of prepared food to the side perhaps the war council will be meeting soon.\n");
-            Room ThroneRoom = new Room("Throne Room", "As you unlock the door and swing it wide you see an enormous hall stretching out before you. At the opposite end of the hall sitting on his throne you see the dark lord. The Dark Lord shouts at you demanding why you dared to interrupt him during his Ritual of Evil Summoning... Dumbfounded you mutter an incoherent response. Becoming more enraged the Dark Lord complains that you just ruined his concentration and he will now have to start the ritual over... Quickly striding towards you he smirks at least I know have a sacrificial volunteer. Plunging his jewel encrusted dagger into your heart your world slowly fades away.\n");
+            Room SquireTower = new Room("Squire Tower", "As you finish climbing the stairs to the squire tower you see an empty and bed and messy room. You see a large crossbow propped against the wall in the corner.\n");
+            Room WarRoom = new Room("War Room", "Steping into the war room you see several maps spread across tables. On the maps many of the villages have been marked for purification. You also notice several dishes of prepared food to the side; perhaps the war council will be meeting soon.\n");
+            Room ThroneRoom = new Room("Throne Room", "As you unlock the door and swing it wide you see an enormous hall stretching out before you. At the opposite end of the hall sitting on his throne you see the dark lord. The Dark Lord shouts at you demanding why you dared to interrupt him during his Ritual of Evil Summoning... Dumbfounded you mutter an incoherent response. Becoming more enraged the Dark Lord complains that you just ruined his concentration and he will now have to start the ritual over... Quickly striding towards you he smirks at least I know have a sacrificial volunteer...\n");
             Room CastleCourtyard = new Room("Castle Courtyard", "You step into the large castle courtyard there is a flowing fountain in the middle of the grounds and a few guards patrolling the area.\n");
             Room Any = new Room("ANY", "");
 
@@ -176,16 +177,19 @@ namespace CastleGrimtol.Project
             Key.Name = "KEY";
             Key.Description = "Your access to victory";
             Key.RelevantRooms.Add(ThroneRoom);
+            Key.Available = false;
             Key.Collectable = false;
-            Item Note = new Item();
-            Note.Name = "NOTE";
-            Note.Description = "A note for the Gate Captain Ezio";
-            Note.Collectable = false;
-            Note.RelevantRooms.Add(SquireTower);
-            Item VialPouch = new Item();
-            VialPouch.Name = "VIAL_POUCH";
-            VialPouch.Description = "A pouch of vials containing a green liquid";
-            VialPouch.RelevantRooms.Add(Any);
+            // Item Note = new Item();
+            // Note.Name = "NOTE";
+            // Note.Description = "A note for the Gate Captain Ezio";
+            // Note.Collectable = false;
+            // Note.RelevantRooms.Add(SquireTower);
+            Item CapitainsPurse = new Item();
+            CapitainsPurse.Name = "PURSE";
+            CapitainsPurse.Available = false;
+            CapitainsPurse.Collectable = false;
+            CapitainsPurse.Description = "A purse full of money";
+            CapitainsPurse.RelevantRooms.Add(Any);
 
             //Guard Room
             Item Hammer = new Item();
@@ -201,16 +205,27 @@ namespace CastleGrimtol.Project
             BrokenLock.Collectable = false;
 
             //Squire Tower
-            Item OverCoat = new Item();
-            OverCoat.Name = "OVERCOAT";
-            OverCoat.Description = "A good way to disguise someone. ...perhaps for an escape";
-            OverCoat.RelevantRooms.Add(Dungeon);
+            // Item OverCoat = new Item();
+            // OverCoat.Name = "OVERCOAT";
+            // OverCoat.Description = "A good way to disguise someone. ...perhaps for an escape";
+            // OverCoat.RelevantRooms.Add(Dungeon);
+
+            Item CrossBow = new Item();
+            CrossBow.Name = "CROSSBOW";
+            CrossBow.Description = "A deadly weapon.";
+            CrossBow.RelevantRooms.Add(ThroneRoom);
 
             //War Room
-            Item Cup = new Item();
-            Cup.Name = "CUP";
-            Cup.Description = "Overly fancy (fit for a lord) goblet. Good for containing liquids...";
-            Cup.RelevantRooms.Add(ThroneRoom);
+            // Item Cup = new Item();
+            // Cup.Name = "CUP";
+            // Cup.Description = "Overly fancy (fit for a lord) goblet. Good for containing liquids...";
+            // Cup.RelevantRooms.Add(ThroneRoom);
+
+            //Throne Room
+            Item Window = new Item();
+            Window.Name = "WINDOW";
+            Window.Collectable = false;
+            Window.Description = "A good place to escape";
 
             //Add Items to their rooms
             Barracks.Items.Add(Uniform);
@@ -218,16 +233,20 @@ namespace CastleGrimtol.Project
             Barracks.Items.Add(Bed2);
 
             CapitainsQuarters.Items.Add(Key);
-            CapitainsQuarters.Items.Add(Note);
-            CapitainsQuarters.Items.Add(VialPouch);
+            // CapitainsQuarters.Items.Add(Note);
+            CapitainsQuarters.Items.Add(CapitainsPurse);
 
             GuardRoom.Items.Add(Hammer);
 
             Dungeon.Items.Add(BrokenLock);
 
-            SquireTower.Items.Add(OverCoat);
+            // SquireTower.Items.Add(OverCoat);
 
-            WarRoom.Items.Add(Cup);
+            // WarRoom.Items.Add(Cup);
+
+            SquireTower.Items.Add(CrossBow);
+
+            ThroneRoom.Items.Add(Window);
 
             //Add commands
             Commands.Add("GO <N, S, E, W>: moves you to a different room");
@@ -249,10 +268,23 @@ namespace CastleGrimtol.Project
                 //Make sure they have the key to enter the throne room
                 if (CurrentRoom.Exits[direction].Name == "Throne Room")
                 {
-                    if (CurrentPlayer.Inventory.Any(item => item.Name.Contains("Key")))
+                    for (int i = 0; i < CurrentPlayer.Inventory.Count; i++)
                     {
-                        CurrentRoom = CurrentRoom.Exits[direction];
+                        Item inventoryItem = CurrentPlayer.Inventory[i];
+                        if (inventoryItem.Name == "KEY")
+                        {
+                            CurrentRoom = CurrentRoom.Exits[direction];
+                            Console.Clear();
+                            DisplayInfo();
+                            RoomCheck();
+                            return;
+                        }
                     }
+
+                    System.Console.WriteLine("\nBlast! This room appears to be locked. If only you had the key...");
+                    System.Console.WriteLine("Press any key to continue...");
+                    Console.ReadLine();
+                    return;
 
                 }
                 // For any other room, just update the current room
@@ -304,7 +336,7 @@ namespace CastleGrimtol.Project
                                 if (CapitainsRoomEntered)
                                 {
                                     Console.Clear();
-                                    System.Console.WriteLine("\"What?! an escaped prisoner...?! When did this happen? Quick take this (He slams a silver key on the table and jots down a quick note) go fetch a messenger boy for me and have him take this note the Gate Captain Ezio, but keep this quite. If That prisoner is really has escaped it will be both our heads.\" (CAPTAIN) \"I'll go rouse the guards\", (The captain runs to the door north heading for the Barracks)");
+                                    System.Console.WriteLine("\"What?! an escaped prisoner...?! When did this happen? Quick take this! (He slams a silver key on the table) Keep this quiet. If that prisoner really has escaped it will be both our heads. I'll need to go grab a random surf and lock him up in the dungeon just in case anyone checks to see if the prisoner is there.\" (CAPTAIN) \"I'll go rouse the guards.\" (The captain runs to the door north heading for the Barracks)");
                                     // Enable key for pick-up
                                     for (int j = 0; j < CurrentRoom.Items.Count; j++)
                                     {
@@ -312,12 +344,13 @@ namespace CastleGrimtol.Project
                                         if (roomItem.Name == "KEY")
                                         {
                                             roomItem.Collectable = true;
+                                            roomItem.Available = true;
                                             System.Console.WriteLine("\n\nYou should be able to pick up the KEY now.");
                                         }
-                                        if (roomItem.Name == "NOTE")
+                                        if (roomItem.Name == "PURSE")
                                         {
                                             roomItem.Collectable = true;
-                                            System.Console.WriteLine("\n\nYou should be able to pick up the NOTE now.");
+                                            roomItem.Available = true;
                                         }
                                     }
 
@@ -325,12 +358,18 @@ namespace CastleGrimtol.Project
                                     System.Console.WriteLine("\nPress any key to continue...");
                                     Console.ReadKey();
 
-                                    if (!CurrentPlayer.Inventory.Any(weapon => item.Name.Contains("VIAL_POUCH")))
+                                    if (!CurrentPlayer.Inventory.Any(weapon => item.Name.Contains("PURSE")))
                                     {
                                         Console.Clear();
-                                        System.Console.WriteLine("With the captain gone you look around and notice a pouch of vials hung from the back of the chair the captain was sitting at. The vials are holding a green liquid.\n");
+                                        System.Console.WriteLine("With the captain gone you look around and notice he left his coin purse on the desk. There appears to be a decent amount of money in it.\n");
                                     }
                                 }
+                                break;
+                            case "CROSSBOW":
+                                Console.Clear();
+                                System.Console.WriteLine("\"Come at me you evil jerk!\" you yell as you whip out the crossbow that was hiding behind your back.\n\nShocked the dark lord haults for a second. Just long enough for you to take aim. As his surprise turns to rage and he prepares to charge you, you somehow loose a three arrow burst directly into his face. At first he seems mostly unaffected by the shots, but suddenly goes limp and crashes to the floor, sliding a few feet on his face and landing directly at your feet...");
+                                System.Console.WriteLine("\n\nYou've done it! You've killed the dark lord! ...now you've gotta get out of here!!! (HINT: there's a window to the N!");
+                                CurrentPlayer.Score += 200;
                                 break;
                         }
 
@@ -364,6 +403,12 @@ namespace CastleGrimtol.Project
                             System.Console.WriteLine("\nDang... You're dead.");
                             TryAgain();
                             return;
+                        case "WINDOW":
+                            Console.Clear();
+                            System.Console.WriteLine($"Congratulations {CurrentPlayer.Name}! You've escaped and returned to your family after successfully killing the dark lord! You've won the game!!!");
+                            System.Console.WriteLine($"\nYour score was: {CurrentPlayer.Score}.");
+                            TryAgain();
+                            break;
                     }
                 }
             }
@@ -390,6 +435,11 @@ namespace CastleGrimtol.Project
                         }
                         // remove the item from the list of available items in the room
                         CurrentRoom.Items.Remove(item);
+                        if (item.Name == "PURSE")
+                        {
+                            System.Console.WriteLine("\nChaching! Your family should be set for a while now.");
+                            CurrentPlayer.Score += 100;
+                        }
                         return;
                     }
                     else
@@ -462,7 +512,7 @@ namespace CastleGrimtol.Project
             bool showMenu = true;
             while (showMenu)
             {
-                Console.WriteLine("\nDo you want to try again? (Y/N)");
+                Console.WriteLine("\nDo you want to play again? (Y/N)");
                 string Decision = Console.ReadLine().ToUpper();
                 if (Decision == "Y")
                 {
@@ -513,6 +563,18 @@ namespace CastleGrimtol.Project
                             return;
                         }
                         break;
+                    case "Throne Room":
+                        if (CurrentPlayer.Inventory.Any(item => item.Name.Contains("CROSSBOW")))
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            System.Console.WriteLine("\nThe dark lord gradually pickus up speed and ferocity and you stand there unarmed and terrified. Plunging his jewel encrusted dagger into your heart your world slowly fades away.");
+                            System.Console.WriteLine("\nYou have failed the mission.");
+                            TryAgain();
+                            return;
+                        }
                 }
             }
             else // Uniform not used
