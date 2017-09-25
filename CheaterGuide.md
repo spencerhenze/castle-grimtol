@@ -3,7 +3,7 @@ The winning command sequence (for maximum points):
 go n
 take uniform
 use uniform
-use bed1
+use bed1 *For points only
 
 go s
 go s
@@ -22,7 +22,7 @@ go w
 
 use broken_lock
 take key
-take purse
+take purse *For points only
 go n
 go e
 go n
