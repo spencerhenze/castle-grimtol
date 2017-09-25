@@ -72,7 +72,11 @@ namespace CastleGrimtol.Project
                         System.Console.WriteLine("\nPress any key to continue");
                         Console.ReadKey();
                         break;
-
+                    case "QUIT":
+                        System.Console.WriteLine("\nSee ya! press any key to finish quitting the game.");
+                        Console.ReadKey();
+                        System.Environment.Exit(0);
+                        break;
                     default:
                         System.Console.WriteLine("That's not a valid Command.");
                         break;
@@ -254,6 +258,7 @@ namespace CastleGrimtol.Project
             Commands.Add("USE <Item Name>: uses item in your inventory");
             Commands.Add("LOOK: displays the room description");
             Commands.Add("INVENTORY: displays all items in your inventory");
+            Commands.Add("QUIT: Admit that you are a weakling and quit the game");
 
             //Set CurrentRoom
             CurrentRoom = WestHallway;
